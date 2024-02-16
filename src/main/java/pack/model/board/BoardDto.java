@@ -1,4 +1,4 @@
-package pack.model;
+package pack.model.board;
 
 import lombok.Data;
 
