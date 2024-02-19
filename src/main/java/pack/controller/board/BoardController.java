@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -48,26 +49,38 @@ public class BoardController {
 		// 게시글 목록을 model 객체에 담아 프론트로 전송
 		 model.addAttribute("datas", boardList);
 		
+		// 세션이 존재할 시 게시판으로, 존재하지 않을 시 로그인 화면으로 이동
 		return "board.html";
 		} else {
-			return "login.html";
+			return "redirect:/";
 		}
 	}
 	
 	public String postSearch(Model model) {
 		
+		
 		return "";
 	}
 	
-	@GetMapping("/postDirect")
-	public String postingDirect(Model model) {
+	@GetMapping("/postDetail")
+	public String postingDetail(@RequestParam("post_no") int post_no, Model model) {
 		
+		BoardDto boardDto = boardDao.getPostDetail(post_no);
+		
+		// 조회수 업데이트 성공시 게시글 상세 페이지로 이동, 실패시 오류 페이지로 이동
+		if (boardDao.viewUpdateProcess(post_no)) {
+		model.addAttribute("postDetailData", boardDto);
+		System.out.println(boardDto);
 		return "post.html";
+		} else {
+			return "error.html";
+		}
 	}
 	
+	@GetMapping("posting")
 	public String posting(Model model) {
 		
-		return "";
+		return "posting.html";
 	}
 	
 	public String updatePost(Model model) {

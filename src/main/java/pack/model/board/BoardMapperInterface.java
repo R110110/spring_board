@@ -15,8 +15,12 @@ public interface BoardMapperInterface {
 			+ " left join user on post_user_no = user_no;")
 	List<BoardDto> selectBoardList();
 	
-	@Select("select * from board where post_no = #{post_no}")
-	List<BoardDto> selectPostDetail(int post_no);
+	@Select("select post_no, post_title, post_body, user_id, post_date, post_views from board "
+			+ "left join user on post_user_no = user_no where post_no = #{post_no}")
+	BoardDto selectPostDetail(int post_no);
+	
+	@Update("update board set post_views = post_views + 1 where post_no = #{post_no}")
+	int postViewUpdate(int post_no);
 	
 	@Select("")
 	List<BoardDto> selectSearchedPost(String word);
