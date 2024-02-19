@@ -11,8 +11,9 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface BoardMapperInterface {
 	
-	@Select("select * from board order by post_date limit 10")
-	List<BoardDto> selectBoardHead10();
+	@Select(" select post_no, post_title, post_body, user_id, post_date, post_views from board"
+			+ " left join user on post_user_no = user_no;")
+	List<BoardDto> selectBoardList();
 	
 	@Select("select * from board where post_no = #{post_no}")
 	List<BoardDto> selectPostDetail(int post_no);

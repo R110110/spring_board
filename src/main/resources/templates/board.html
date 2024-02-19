@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-test
+<h3>게시판</h3>
+<a th:href="@{/postDirect}">글쓰기</a>
+<br>
+<table border="1">
+	<tr>
+		<th>번호</th><th>제목</th><th>작성자</th><th>조회수</th><th>작성시간</th>
+	</tr>
+	<th:block th:if="${datas.size > 0}">
+	<tr th:each="data:${datas}">
+		<td>[[${data.post_no}]]</td>
+		<td><a th:href=@{/postDetail(post_no=${data.post_no})}>[[${data.post_title}]]</a></td>
+		<td>[[${data.user_id}]]</td>
+		<td>[[${data.post_views}]]</td>
+		<td>[[${data.post_date}]]</td>
+	</tr>
+	</th:block>
+	<tr>
+		<td colspan="4">
+		<form action="/search" method="post">
+		검색 대상 : 
+		<select name="searchName">
+			<option value="author" selected>작성자</option>
+			<option value="title">제목</option>
+		</select>
+		<input type="text" name="searchValue">
+		<input type="submit" value="검색">
+		</form>
+		</td>
+	</tr>
+</table>
+<br>
+<a th:href=@{/logoutConfirm}>로그아웃</a>
 </body>
 </html>

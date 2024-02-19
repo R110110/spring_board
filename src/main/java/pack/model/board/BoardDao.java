@@ -13,7 +13,7 @@ public class BoardDao {
 	
 	// 게시글 목록을 읽어와 list로 반환
 	public List<BoardDto> getBoardList(){
-		List<BoardDto> boardList = boardMapperInterface.selectBoardHead10();
+		List<BoardDto> boardList = boardMapperInterface.selectBoardList();
 		
 		return boardList;
 	}
