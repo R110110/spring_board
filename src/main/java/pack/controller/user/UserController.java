@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import pack.model.user.UserDao;
 import pack.model.user.UserDto;
 
@@ -17,14 +18,25 @@ public class UserController {
 	private UserDao userDao;
 	
 	@PostMapping("loginConfirm")
-	public String loginController(@ModelAttribute("item") UserDto userDto, Model model) {
+	public String loginController(@ModelAttribute("item") UserDto userDto, HttpServletRequest request, Model model) {
+		
+		// 로그인 폼에서 받아온 정보를 DB와 대조
 		UserDto dto = userDao.loginConfirmProcess(userDto.getUser_id(), userDto.getUser_pwd());
+		
 		if(dto != null) {
-			// System.out.println("성공");
+			
+			// 로그인 성공시 세션 생성 후 게시판 페이지로 이동
+			HttpSession session = request.getSession();
+			session.setAttribute("user_no", dto.getUser_no());
+			session.setAttribute("user_id", dto.getUser_id());
+			
 			return "redirect:/boardDirect";
 		} else {
+			
+			// 로그인 실패 시 에러 문구를 모델에 담아 로그인 페이지로 다시 이동
 			String msg = "아이디 또는 비밀번호를 확인해주세요";
 			model.addAttribute("msg", msg);
+			
 			return "login.html";
 		}
 	}
