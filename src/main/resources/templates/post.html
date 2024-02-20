@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-post test
+<h3> 상세 보기 </h3>
+<div th:object="${postDetailData}">
+글번호 : [[${postDetailData.post_no}]] <br/>
+조회수 : [[${postDetailData.post_views}]] <br>
+작성일 : [[${postDetailData.post_date}]] <br>
+작성자 : [[${postDetailData.user_id}]] <br>
+글제목 : [[${postDetailData.post_title}]] <br>
+글내용 : [[${postDetailData.post_body}]] <br>
+</div>
+<input type="button" th:onclick="|location.href='@{/boardDirect}'|" th:value="목록">
+<input type="button" th:onclick="|location.href='@{/updatePost(post_no=${postDetailData.post_no})}'|" th:value="수정">
+<input type="button" th:value="삭제" >
+<div th:text="${msg}"></div>
 </body>
 </html>

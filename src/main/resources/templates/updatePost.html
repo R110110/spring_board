@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<p>글쓰기<p/>
+<form th:action="@{/updateConfirm}" th:object="${postDetailData}" method="post">
+글제목 : <input type="text" th:field="*{post_title}" size="48"><br/><br/>
+글내용 : <textarea rows="5" cols="50" th:field="*{post_body}"></textarea>
+<input type="hidden" th:field="*{post_no}">
+<input type="hidden" th:field="*{post_user_no}">
+<br/><br/>
+<input type="submit" th:value="수정하기">
+<input type="button" th:onclick="|location.href='@{/postDetail(post_no=${postDetailData.post_no})}'|" th:value="돌아가기">
+</form>
+</body>
+</html>

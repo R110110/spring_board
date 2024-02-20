@@ -16,7 +16,7 @@
             <input type="password" th:field="*{user_pwd}" class="form-control">
         </div>
         <button type="submit" class="btn btn-primary">로그인</button>
-        <button type=button class="btn btn-primary" >회원가입</button>
+        <button type=button th:onclick="|location.href='@{/siginDirect}'|" class="btn btn-primary" >회원가입</button>
     </form>
     <div th:text="${msg}"></div>
 </div>

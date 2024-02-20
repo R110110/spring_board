@@ -53,4 +53,10 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	@GetMapping("/siginDirect")
+	public String singinDriect(Model model) {
+		
+		return "signin.html";
+	}
+	
 }

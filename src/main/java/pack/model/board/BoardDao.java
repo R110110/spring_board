@@ -36,5 +36,23 @@ public class BoardDao {
 
 	}
 	
+	public boolean postingProcess(String post_title, String post_body, int post_user_no) {
+		
+		boolean updateFlag = false;
+		int update = boardMapperInterface.posting(post_title, post_body, post_user_no);
+		
+		if (update > 0) updateFlag = true;
+		return updateFlag;
+	}
+	
+	public boolean updateProcess(String post_title, String post_body, int post_no, int post_user_no) {
+		
+		boolean flag = false;
+		int posting = boardMapperInterface.updatePost(post_title, post_body, post_no, post_user_no);
+		
+		if (posting > 0) flag = true;
+		return flag;
+	}
+	
 	
 }
