@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-sigin test
+	<div>
+		<form th:action="@{/signinConfirm}" th:object="${signinInfo}"
+			method="post">
+			<div>
+				<label>ID : </label> 
+				<input type="text" id="user_id" th:field=*{user_id}>
+				<button type="button" id="idCheckbtn">중복체크</button>
+				<label th:id="idCheckMsg"></label>
+			</div>
+			<div>
+				<label>비밀번호 : </label> <input type="password" th:field=*{user_pwd}>
+			</div>
+			<div>
+				<label>비밀번호 확인 : </label> <input type="password">
+			</div>
+			<div>
+				<label>이메일 : </label> <input type="text" th:field=*{user_mail}>
+			</div>
+			<div>
+		<input type="submit" id="signin" th:value="가입하기">
+		<input type="button" th:value="돌아가기">
+			</div>
+		</form>
+	</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+$("#idCheckbtn").click(function(){
+	$("#signin").attr("type", "button");
+	const user_id = $("#user_id").val();
+	$.ajax({
+		type: "get", 
+		async: false, 
+		url: "idCheck", 
+		data: {user_id : user_id},
+		success: function(result){
+			if(result == 1){
+				$("#idCheckMsg").text("이미 사용중인 ID입니다.");
+				
+			} else {
+				$("#idCheckMsg").text("사용가능한 ID입니다.");
+				$("#signin").attr("type", "submit");
+			}
+		}
+	})
+});
+</script>
 </body>
 </html>

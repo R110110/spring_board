@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -54,9 +56,38 @@ public class UserController {
 	}
 	
 	@GetMapping("/siginDirect")
-	public String singinDriect(Model model) {
+	public String singinDriect(HttpServletRequest request, Model model) {
+		
+		// 회원가입 폼을 받아올 dto 객체 생성 후 모델을 통해 회원가입 페이지로 전송
+		UserDto userDto = new UserDto();
+		model.addAttribute("signinInfo", userDto);
 		
 		return "signin.html";
 	}
 	
+	@PostMapping("/signinConfirm")
+	public String signinConfirm(@ModelAttribute("signinInfo") UserDto userDto, Model model) {
+
+		System.out.println(userDto);
+		if (userDao.signinProcess(userDto.getUser_id(), userDto.getUser_pwd(), userDto.getUser_mail()) == true) {
+			return "redircet:/signinConfirmPage";
+		} else {
+			return "error.html";
+		}
+		
+	}
+	
+	@GetMapping("signinConfirmPage")
+	public String signinConfirmPage() {
+		
+		return "signinConfirm.html";
+	}
+	
+	@ResponseBody
+	@GetMapping("idCheck")
+	public int idChecker(@RequestParam("user_id") String user_id) {
+		int result = userDao.idCheckProcess(user_id);
+		System.out.println(result);
+		return result;
+	}
 }
