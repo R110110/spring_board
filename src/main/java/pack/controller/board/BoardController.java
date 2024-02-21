@@ -108,6 +108,8 @@ public class BoardController {
 		HttpSession session = request.getSession();
 		BoardDto boardDto = boardDao.getPostDetail(post_no);
 		model.addAttribute("postDetailData", boardDto);
+		
+		// 세션에서 유저 번호 조회후 일치시 수정 페이지로 이동
 		if((int)session.getAttribute("user_no") != boardDto.getPost_user_no()) {
 			String msg = "수정 권한이 없습니다";
 			model.addAttribute("msg", msg);
@@ -121,6 +123,7 @@ public class BoardController {
 	public String updateConfirm(@ModelAttribute("postDetailData") BoardDto boardDto, Model model) {
 //		System.out.println(boardDto);
 		
+		// DB 업데이트 성공시 해당 게시글 상세조회로 이동, 실패시 게시판 목록 페이지로 이동
 		if(boardDao.updateProcess(boardDto.getPost_title(), boardDto.getPost_body(), boardDto.getPost_no(), boardDto.getPost_user_no())) {
 			return "redirect:/postDetail?post_no=" + boardDto.getPost_no();
 		} else {
@@ -129,8 +132,29 @@ public class BoardController {
 		}
 	}
 	
-	public String deletePost(@ModelAttribute("postDetailData") BoardDto boardDto, Model model) {
+	@GetMapping("deletePost")
+	public String deletePost(@RequestParam("post_no") int post_no, HttpServletRequest request, Model model) {
 		
-		return "";
+		HttpSession session = request.getSession();
+		BoardDto boardDto = boardDao.getPostDetail(post_no);
+		model.addAttribute("postDetailData", boardDto);
+		
+		// 세션에서 유저 번호 조회후 일치시 게시물 삭제 진행
+		if((int)session.getAttribute("user_no") != boardDto.getPost_user_no()) {
+			String msg = "삭제 권한이 없습니다";
+			model.addAttribute("msg", msg);
+			return "post.html";
+		} else {	
+			
+			// 삭제 성공시 게시판 목록 페이지로 이동, 실패시 에러 페이지로 이동
+			if(boardDao.deleteProcess(boardDto.getPost_no(), boardDto.getPost_user_no())) {
+				String msg = "삭제되었습니다";
+				model.addAttribute("msg", msg);				
+				return "redirect:/boardDirect";
+			} else {
+				return "error.html";
+			}
+		}
+		
 	}
 }

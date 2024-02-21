@@ -36,6 +36,7 @@ public class BoardDao {
 
 	}
 	
+	// 게시물 업로드
 	public boolean postingProcess(String post_title, String post_body, int post_user_no) {
 		
 		boolean updateFlag = false;
@@ -45,10 +46,21 @@ public class BoardDao {
 		return updateFlag;
 	}
 	
+	// 게시물 수정
 	public boolean updateProcess(String post_title, String post_body, int post_no, int post_user_no) {
 		
 		boolean flag = false;
 		int posting = boardMapperInterface.updatePost(post_title, post_body, post_no, post_user_no);
+		
+		if (posting > 0) flag = true;
+		return flag;
+	}
+	
+	// 게시물 삭제
+	public boolean deleteProcess(int post_no, int post_user_no) {
+		
+		boolean flag = false;
+		int posting = boardMapperInterface.deletePost(post_no, post_user_no);
 		
 		if (posting > 0) flag = true;
 		return flag;

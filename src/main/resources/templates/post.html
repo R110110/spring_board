@@ -16,7 +16,7 @@
 </div>
 <input type="button" th:onclick="|location.href='@{/boardDirect}'|" th:value="목록">
 <input type="button" th:onclick="|location.href='@{/updatePost(post_no=${postDetailData.post_no})}'|" th:value="수정">
-<input type="button" th:value="삭제" >
+<input type="button" th:onclick="|location.href='@{/deletePost(post_no=${postDetailData.post_no})}'|" th:value="삭제" >
 <div th:text="${msg}"></div>
 </body>
 </html>

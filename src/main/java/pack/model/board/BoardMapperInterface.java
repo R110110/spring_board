@@ -34,5 +34,5 @@ public interface BoardMapperInterface {
 	int updatePost(@Param("post_title") String post_title, @Param("post_body") String post_body, @Param("post_no") int post_no, @Param("post_user_no") int post_user_no);
 	
 	@Delete("delete from board where post_no = #{post_no} and post_user_no = #{post_user_no}")
-	int deletePost(int post_no, int post_user_no);
+	int deletePost(@Param("post_no") int post_no, @Param("post_user_no") int post_user_no);
 }
