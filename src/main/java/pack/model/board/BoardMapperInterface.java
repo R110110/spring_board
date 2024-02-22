@@ -13,12 +13,15 @@ import org.apache.ibatis.annotations.Update;
 public interface BoardMapperInterface {
 	
 	@Select(" select post_no, post_title, post_body, user_id, post_date, post_views from board"
-			+ " left join user on post_user_no = user_no order by post_no desc;")
-	List<BoardDto> selectBoardList();
+			+ " left join user on post_user_no = user_no order by post_no desc limit #{rowCount} offset #{offset};")
+	List<BoardDto> selectBoardList(Pagination pagination);
 	
 	@Select("select post_no, post_title, post_body, post_user_no, user_id, post_date, post_views from board "
 			+ "left join user on post_user_no = user_no where post_no = #{post_no}")
 	BoardDto selectPostDetail(int post_no);
+	
+	@Select("select count(*) from board")
+	int boardCount();
 	
 	@Update("update board set post_views = post_views + 1 where post_no = #{post_no}")
 	int postViewUpdate(int post_no);

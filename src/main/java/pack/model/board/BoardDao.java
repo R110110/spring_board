@@ -11,11 +11,20 @@ public class BoardDao {
 	@Autowired
 	private BoardMapperInterface boardMapperInterface;
 	
+	public int totalRecord() {
+		return boardMapperInterface.boardCount();
+	}
+	
 	// 게시글 목록을 읽어와 list로 반환
-	public List<BoardDto> getBoardList(){
-		List<BoardDto> boardList = boardMapperInterface.selectBoardList();
-		
+	public List<BoardDto> getBoardList(Pagination pagination){
+		List<BoardDto> boardList = boardMapperInterface.selectBoardList(pagination);
 		return boardList;
+	}
+	
+	// 페이징
+	public int getCount() {
+		int count = boardMapperInterface.boardCount();
+		return count;
 	}
 	
 	// 게시글 상세 정보 불러오기
