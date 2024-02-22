@@ -66,11 +66,16 @@ public class UserController {
 	}
 	
 	@PostMapping("/signinConfirm")
-	public String signinConfirm(@ModelAttribute("signinInfo") UserDto userDto, Model model) {
+	public String signinConfirm(HttpServletRequest request, @ModelAttribute("signinInfo") UserDto userDto, Model model) {
 
 		System.out.println(userDto);
 		if (userDao.signinProcess(userDto.getUser_id(), userDto.getUser_pwd(), userDto.getUser_mail()) == true) {
-			return "redircet:/signinConfirmPage";
+			
+			userDto = userDao.loginConfirmProcess(userDto.getUser_id(), userDto.getUser_pwd());
+			HttpSession session = request.getSession();
+			session.setAttribute("user_no", userDto.getUser_no());
+			session.setAttribute("user_id", userDto.getUser_id());
+			return "redirect:/signinConfirmPage";
 		} else {
 			return "error.html";
 		}
@@ -78,16 +83,16 @@ public class UserController {
 	}
 	
 	@GetMapping("signinConfirmPage")
-	public String signinConfirmPage() {
+	public String signinConfirmPage(HttpServletRequest request) {
 		
-		return "signinConfirm.html";
+		return "signinConfirmPage.html";
 	}
 	
 	@ResponseBody
 	@GetMapping("idCheck")
 	public int idChecker(@RequestParam("user_id") String user_id) {
 		int result = userDao.idCheckProcess(user_id);
-		System.out.println(result);
+//		System.out.println(result);
 		return result;
 	}
 }

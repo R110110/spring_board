@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
 <h3> 상세 보기 </h3>
 <div th:object="${postDetailData}">
@@ -15,8 +16,14 @@
 글내용 : [[${postDetailData.post_body}]] <br>
 </div>
 <input type="button" th:onclick="|location.href='@{/boardDirect}'|" th:value="목록">
-<input type="button" th:onclick="|location.href='@{/updatePost(post_no=${postDetailData.post_no})}'|" th:value="수정">
-<input type="button" th:onclick="|location.href='@{/deletePost(post_no=${postDetailData.post_no})}'|" th:value="삭제" >
+<input type="button" id="updateBtn" th:onclick="|location.href='@{/updatePost(post_no=${postDetailData.post_no})}'|" th:value="수정">
+<input type="button" id="deleteBtn" th:onclick="|location.href='@{/deletePost(post_no=${postDetailData.post_no})}'|" th:value="삭제" >
 <div th:text="${msg}"></div>
+<script type="text/javascript">
+$("#deleteBtn").click(function(){
+	var result = confirm("삭제하시겠습니까?");
+		if(!result){return false;}
+});
+</script>
 </body>
 </html>

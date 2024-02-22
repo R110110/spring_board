@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
 <p>글쓰기<p/>
 <form th:action="@{/updateConfirm}" th:object="${postDetailData}" method="post">
@@ -12,8 +13,14 @@
 <input type="hidden" th:field="*{post_no}">
 <input type="hidden" th:field="*{post_user_no}">
 <br/><br/>
-<input type="submit" th:value="수정하기">
+<input type="submit" id="updateBtn" th:value="수정하기">
 <input type="button" th:onclick="|location.href='@{/postDetail(post_no=${postDetailData.post_no})}'|" th:value="돌아가기">
 </form>
+<script type="text/javascript">
+$("#updateBtn").click(function(){
+	var result = confirm("수정하시겠습니까?");
+		if(!result){return false;}
+});
+</script>
 </body>
 </html>

@@ -13,7 +13,7 @@ import org.apache.ibatis.annotations.Update;
 public interface BoardMapperInterface {
 	
 	@Select(" select post_no, post_title, post_body, user_id, post_date, post_views from board"
-			+ " left join user on post_user_no = user_no;")
+			+ " left join user on post_user_no = user_no order by post_no desc;")
 	List<BoardDto> selectBoardList();
 	
 	@Select("select post_no, post_title, post_body, post_user_no, user_id, post_date, post_views from board "
