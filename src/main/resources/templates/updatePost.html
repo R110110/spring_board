@@ -1,26 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
+	crossorigin="anonymous" />
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
-<p>글쓰기<p/>
-<form th:action="@{/updateConfirm}" th:object="${postDetailData}" method="post">
-글제목 : <input type="text" th:field="*{post_title}" size="48"><br/><br/>
-글내용 : <textarea rows="5" cols="50" th:field="*{post_body}"></textarea>
-<input type="hidden" th:field="*{post_no}">
-<input type="hidden" th:field="*{post_user_no}">
-<br/><br/>
-<input type="submit" id="updateBtn" th:value="수정하기">
-<input type="button" th:onclick="|location.href='@{/postDetail(post_no=${postDetailData.post_no})}'|" th:value="돌아가기">
-</form>
-<script type="text/javascript">
-$("#updateBtn").click(function(){
-	var result = confirm("수정하시겠습니까?");
-		if(!result){return false;}
-});
-</script>
+	<p>글쓰기
+	<p />
+	<form th:action="@{/updateConfirm}" th:object="${postDetailData}"
+		method="post">
+		글제목 : <input type="text" th:field="*{post_title}" size="48"><br />
+		<br /> 글내용 :
+		<textarea rows="5" cols="50" th:field="*{post_body}"></textarea>
+		<input type="hidden" th:field="*{post_no}"> <input
+			type="hidden" th:field="*{post_user_no}"> <br />
+		<br /> <input type="submit" id="updateBtn" th:value="수정하기"> <input
+			type="button"
+			th:onclick="|location.href='@{/postDetail(post_no=${postDetailData.post_no})}'|"
+			th:value="돌아가기">
+	</form>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+		crossorigin="anonymous">
+		$("#updateBtn").click(function() {
+			var result = confirm("수정하시겠습니까?");
+			if (!result) {
+				return false;
+			}
+		});
+	</script>
 </body>
 </html>

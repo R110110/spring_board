@@ -61,7 +61,7 @@ public class BoardController {
 			model.addAttribute("pagination", pagination);
 
 			// 세션이 존재할 시 게시판으로, 존재하지 않을 시 로그인 화면으로 이동
-			return "board.html";
+			return "board";
 		} else {
 			return "redirect:/";
 		}
