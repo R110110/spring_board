@@ -21,9 +21,46 @@ public class BoardDao {
 		return boardList;
 	}
 	
+	// 유저 아이디로 검색
+	public List<BoardDto> searchByIdProcess(Pagination pagination){
+		List<BoardDto> boardList = boardMapperInterface.SearchById(pagination);
+		
+		return boardList;
+	}
+	
+	// 제목으로 검색
+	public List<BoardDto> searchByTitleProcess(Pagination pagination){
+		List<BoardDto> boardList = boardMapperInterface.SearchByTitle(pagination);
+		
+		return boardList;
+	}
+	
+	// 본문으로 검색
+	public List<BoardDto> searchByBodyProcess(String post_body, Pagination pagination){
+		List<BoardDto> boardList = boardMapperInterface.SearchByTitle(pagination);
+		
+		return boardList;
+	}
+	
 	// 페이징
 	public int getCount() {
 		int count = boardMapperInterface.boardCount();
+		return count;
+	}
+	
+	// 검색 페이징
+	public int getIdSearchCount(String user_id) {
+		int count = boardMapperInterface.idSearchCount(user_id);
+		return count;
+	}
+	
+	public int getTitleSearchCount(String post_title) {
+		int count = boardMapperInterface.titleSearchCount(post_title);
+		return count;
+	}
+	
+	public int getBodySearchCount(String post_body) {
+		int count = boardMapperInterface.bodySearchCount(post_body);
 		return count;
 	}
 	

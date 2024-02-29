@@ -21,6 +21,8 @@ public class Pagination {
 	private String searchProduct,searchUser,searchSubject, searchValue;
 	
 	int offset;
+	
+	String post_title, post_body, user_id;
 
 	public Pagination(final int totalCount, final int page) {
 	    

@@ -23,11 +23,29 @@ public interface BoardMapperInterface {
 	@Select("select count(*) from board")
 	int boardCount();
 	
+	@Select("select count(*) from board left join user on post_user_no = user_no where user_id = #{user_id}")
+	int idSearchCount(String user_id);
+	
+	@Select("select count(*) from board where post_title like CONCAT('%', #{post_title}, '%')")
+	int titleSearchCount(String post_title);
+	
+	@Select("select count(*) from board where post_body like CONCAT('%', #{post_body}, '%')")
+	int bodySearchCount(String post_body);
+	
 	@Update("update board set post_views = post_views + 1 where post_no = #{post_no}")
 	int postViewUpdate(int post_no);
 	
-	@Select("")
-	List<BoardDto> selectSearchedPost(String word);
+	@Select(" select post_no, post_title, post_body, user_id, post_date, post_views from board"
+			+ " left join user on post_user_no = user_no where user_id like CONCAT('%', #{user_id}, '%') order by post_no desc limit #{rowCount} offset #{offset};")
+	List<BoardDto> SearchById(Pagination pagination);
+	
+	@Select(" select post_no, post_title, post_body, user_id, post_date, post_views from board"
+			+ " left join user on post_user_no = user_no where post_title like CONCAT('%', #{post_title}, '%') order by post_no desc limit #{rowCount} offset #{offset};")
+	List<BoardDto> SearchByTitle(Pagination pagination);
+	
+	@Select(" select post_no, post_title, post_body, user_id, post_date, post_views from board"
+			+ " left join user on post_user_no = user_no where post_body like CONCAT('%', #{post_body}, '%') order by post_no desc limit #{rowCount} offset #{offset};")
+	List<BoardDto> SearchByBody(Pagination pagination);
 	
 	@Insert("insert into board(post_title, post_body, post_user_no) values(#{post_title}, #{post_body}, #{post_user_no})")
 	int posting(@Param("post_title") String post_title, @Param("post_body") String post_body, @Param("post_user_no") int post_user_no);

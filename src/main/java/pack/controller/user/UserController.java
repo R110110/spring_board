@@ -1,5 +1,7 @@
 package pack.controller.user;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,8 @@ import pack.model.user.UserDto;
 
 @Controller
 public class UserController {
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	private UserDao userDao;
@@ -61,14 +65,14 @@ public class UserController {
 		// 회원가입 폼을 받아올 dto 객체 생성 후 모델을 통해 회원가입 페이지로 전송
 		UserDto userDto = new UserDto();
 		model.addAttribute("signinInfo", userDto);
-		
+//		logger.info("userDto" + userDto);
 		return "signin.html";
 	}
 	
 	@PostMapping("/signinConfirm")
 	public String signinConfirm(HttpServletRequest request, @ModelAttribute("signinInfo") UserDto userDto, Model model) {
 
-		System.out.println(userDto);
+//		logger.info("userDto" + userDto);
 		if (userDao.signinProcess(userDto.getUser_id(), userDto.getUser_pwd(), userDto.getUser_mail()) == true) {
 			
 			userDto = userDao.loginConfirmProcess(userDto.getUser_id(), userDto.getUser_pwd());
@@ -92,7 +96,7 @@ public class UserController {
 	@GetMapping("idCheck")
 	public int idChecker(@RequestParam("user_id") String user_id) {
 		int result = userDao.idCheckProcess(user_id);
-//		System.out.println(result);
+//		logger.info("result" + result);
 		return result;
 	}
 }

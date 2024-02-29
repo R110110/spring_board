@@ -45,31 +45,65 @@ public class BoardController {
 
 	@GetMapping("/boardDirect")
 	public String boardDircet(@RequestParam(value = "page", defaultValue = "1") int page, HttpServletRequest request, Model model) {
-
+		
 		// 세션 체크
 		HttpSession session = request.getSession();
 		if (session.getAttribute("user_no") != null) {
-			
 			// 페이징
 			Pagination pagination = new Pagination(boardDao.getCount(), page);
-			logger.info("pagination" + pagination);
+//			logger.info("pagination" + pagination);
 			ArrayList<BoardDto> boardList = (ArrayList<BoardDto>) boardDao.getBoardList(pagination);
 
 			// 게시글 목록을 model 객체에 담아 프론트로 전송
 			model.addAttribute("datas", boardList);
 			model.addAttribute("page", page);
 			model.addAttribute("pagination", pagination);
-
+			
+//			model.addAttribute("searchItem", new BoardDto());
+			
 			// 세션이 존재할 시 게시판으로, 존재하지 않을 시 로그인 화면으로 이동
 			return "board";
 		} else {
 			return "redirect:/";
 		}
 	}
-
-	public String postSearch(Model model) {
-
-		return "";
+	
+	@PostMapping("/search")
+	public String postSearch(@RequestParam(value = "page", defaultValue = "1") int page, @ModelAttribute BoardDto boardDto, Model model) {
+		System.out.println(boardDto);
+		System.out.println(boardDao.getTitleSearchCount(boardDto.getPost_title()));
+		ArrayList<BoardDto> boardList = new ArrayList<BoardDto>();
+		
+		// 카테고리별로 검색 결과 출력 후 페이징
+		if (boardDto.getPost_title() != null) {
+			
+			Pagination pagination = new Pagination(boardDao.getTitleSearchCount(boardDto.getPost_title()), page);
+			pagination.setPost_title(boardDto.getPost_title());
+			boardList = (ArrayList<BoardDto>) boardDao.searchByTitleProcess(pagination);
+//			System.out.println(boardList);
+			model.addAttribute("pagination", pagination);
+			
+		} else if (boardDto.getUser_id() != null) {
+			
+			Pagination pagination = new Pagination(boardDao.getIdSearchCount(boardDto.getUser_id()), page);
+			pagination.setUser_id(boardDto.getUser_id());
+			boardList = (ArrayList<BoardDto>) boardDao.searchByIdProcess(pagination);
+			model.addAttribute("pagination", pagination);
+			
+		} else if (boardDto.getPost_body() != null) {
+			
+			Pagination pagination = new Pagination(boardDao.getBodySearchCount(boardDto.getPost_body()), page);
+			pagination.setPost_body(boardDto.getPost_body());
+			boardList = (ArrayList<BoardDto>) boardDao.searchByBodyProcess(boardDto.getPost_body(), pagination);
+			model.addAttribute("pagination", pagination);
+			
+		}
+		
+		model.addAttribute("datas", boardList);
+		model.addAttribute("page", page);
+		
+		
+		return "board.html";
 	}
 
 	@GetMapping("/postDetail")
@@ -79,7 +113,7 @@ public class BoardController {
 		// 조회수 업데이트 성공시 게시글 상세 페이지로 이동, 실패시 오류 페이지로 이동
 		if (boardDao.viewUpdateProcess(post_no)) {
 			model.addAttribute("postDetailData", boardDto);
-//		System.out.println(boardDto);
+//		logger.info("boardDto" + boardDto);
 			return "post.html";
 		} else {
 			return "error.html";
@@ -130,7 +164,6 @@ public class BoardController {
 
 	@PostMapping("updateConfirm")
 	public String updateConfirm(@ModelAttribute("postDetailData") BoardDto boardDto, Model model) {
-//		System.out.println(boardDto);
 
 		// DB 업데이트 성공시 해당 게시글 상세조회로 이동, 실패시 게시판 목록 페이지로 이동
 		if (boardDao.updateProcess(boardDto.getPost_title(), boardDto.getPost_body(), boardDto.getPost_no(),
